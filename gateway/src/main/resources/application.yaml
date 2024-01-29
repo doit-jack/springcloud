@@ -1,0 +1,88 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: apigateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway Global Filter
+            preLogger: true
+            postLogger: true
+      routes:
+        - id: user-service/login
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service/sign-up
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/users
+            - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/**
+            - Method=GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+            - AuthorizationHeaderFilter
+
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog-service/**
+          filters:
+            - RewritePath=/catalog-service/(?<segment>.*),/$\{segment}
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order-service/**
+          filters:
+            - RewritePath=/order-service/(?<segment>.*),/$\{segment}
+
+
+        - id: first-service
+          uri: lb://FIRST-SERVICE
+          predicates:
+            - Path=/first-service/**
+          filters:
+            #            - AddRequestHeader=first-request, first-request-header2
+            #            - AddResponseHeader=first-response, first-response-header2
+            - CustomFilter
+            - name: LoggingFilter
+              args:
+                baseMessage: Hi, Logging
+                preLogger: true
+                postLogger: true
+            - RewritePath=/first-service/(?<segment>.*),/$\{segment}
+        - id: second-service
+          uri: lb://SECOND-SERVICE
+          predicates:
+            - Path=/second-service/**
+          filters:
+            - RewritePath=/second-service/(?<segment>.*),/$\{segment}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka #eureka?? ?????? ??? ???????? ?????.
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway

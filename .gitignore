@@ -1,0 +1,8 @@
+.idea
+.gradle
+
+out/
+build/
+**/src/main/generated/**
+**/src/generated/**
+docker-provision/
