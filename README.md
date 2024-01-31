@@ -50,3 +50,34 @@ https://techblog.woowahan.com/2625/
 - Middleware로 동작
 
 But , ribbon, zuul 모두 maintenance 상태로 -> spring cloud gateway 쓰라고 되어 있음
+
+# Spring Cloud
+
+@ConfigurationProperties - Refresh 될 때 항상 Bean이 재생성 됨
+
+vs
+
+@RefreshScope - 해당 Bean은 프록시로 생성되고, 실제 Bean을 캐시에 저장. /refresh 될 때, Proxy의 bean이 destroy되고 캐시의 값을 초기화.
+
+# Kafka
+
+```bash
+docker-compose -f docker-compose.yml up -d
+```
+
+![image.png](assets/kafka.png)
+
+![image.png](assets/kafka2.png)
+
+
+## 설치 과정
+
+https://velog.io/@imnooy/Kafka-Connect-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0
+
+```bash
+brew tap confluentinc/homebrew-confluent-hub-client
+
+brew install --cask confluent-hub-client
+
+confluent-hub install confluentinc/kafka-connect-jdbc:latest --component-dir /Users/jack/99_Study/kafka-connect/component --worker-configs /Users/jack/99_Study/kafka-connect/config/worker.properties
+```

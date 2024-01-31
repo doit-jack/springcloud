@@ -1,0 +1,6 @@
+encrypt:
+#  key: aldfkjlalksdjflkjae
+  key-store:  # 암호화 때는 private, 복호화 때는 public key 가 일반적으로 사용됨
+    location: file://${user.home}/99_Study/github/keystore/apiEncryptionKey.jks
+    password: test1234
+    alias: apiEncryptionKey

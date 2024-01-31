@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: apigateway-service
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
   cloud:
     gateway:
       default-filters:
@@ -13,6 +18,7 @@ spring:
             preLogger: true
             postLogger: true
       routes:
+        # user-service
         - id: user-service/login
           uri: lb://USER-SERVICE
           predicates:
@@ -26,6 +32,14 @@ spring:
           predicates:
             - Path=/user-service/users
             - Method=POST
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user-service/(?<segment>.*),/$\{segment}
+        - id: user-service/actuator
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/actuator/**
+            - Method=GET,POST
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*),/$\{segment}
@@ -85,4 +99,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: gateway
+        include: refresh, health, beans, httptrace, busrefresh

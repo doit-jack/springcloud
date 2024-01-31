@@ -39,10 +39,7 @@ subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     dependencies {
-        implementation("org.springframework.boot:spring-boot-starter")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
-        testImplementation("org.springframework.boot:spring-boot-starter-test")
-        implementation("io.github.oshai:kotlin-logging-jvm:5.1.1")
     }
 
     extra["springCloudVersion"] = "2023.0.0"

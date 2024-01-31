@@ -4,12 +4,14 @@ import io.jsonwebtoken.JwtParser
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cloud.context.config.annotation.RefreshScope
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.util.*
 import javax.crypto.SecretKey
 
 @Component
+@RefreshScope
 class JwtUtils(
     @Value("\${token.secret}") val secretKey: String,
     @Value("\${token.expiration_time}") val expirationTime: Long,

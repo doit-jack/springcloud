@@ -15,8 +15,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.modelmapper:modelmapper:2.4.4")
-    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 //    developmentOnly("org.springframework.boot:spring-boot-devtools")
 }

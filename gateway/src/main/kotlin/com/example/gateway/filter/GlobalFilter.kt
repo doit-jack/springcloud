@@ -1,6 +1,6 @@
 package com.example.gateway.filter
 
-import com.example.log
+import com.example.core.utils.log
 import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory
 import org.springframework.stereotype.Component

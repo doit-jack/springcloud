@@ -15,7 +15,6 @@ class AuthorizationHeaderFilter(
     val jwtUtils: JwtUtils
 ) : AbstractGatewayFilterFactory<AuthorizationHeaderFilter.Config>(Config::class.java) {
 
-
     class Config
 
     override fun apply(config: Config): GatewayFilter =
