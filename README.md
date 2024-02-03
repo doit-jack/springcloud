@@ -63,12 +63,15 @@ vs
 
 ```bash
 docker-compose -f docker-compose.yml up -d
+
+kafka-topics --bootstrap-server localhost:9092 --list
+
+kafka-console-consumer --bootstrap-server localhost:9092 --topic my_topic_users --from-beginning
 ```
 
 ![image.png](assets/kafka.png)
 
 ![image.png](assets/kafka2.png)
-
 
 ## 설치 과정
 

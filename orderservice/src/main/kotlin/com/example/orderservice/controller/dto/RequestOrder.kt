@@ -1,4 +1,4 @@
-package com.example.orderservice.controller
+package com.example.orderservice.controller.dto
 
 data class RequestOrder(
     var productId: String,

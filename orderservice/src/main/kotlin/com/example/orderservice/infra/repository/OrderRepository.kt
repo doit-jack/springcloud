@@ -1,4 +1,4 @@
-package com.example.orderservice.repository
+package com.example.orderservice.infra.repository
 
 import com.example.orderservice.domain.OrderEntity
 import org.springframework.data.repository.CrudRepository

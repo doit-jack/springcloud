@@ -1,19 +1,25 @@
 package com.example.orderservice.controller
 
 import com.example.orderservice.application.OrderService
+import com.example.orderservice.controller.dto.RequestOrder
 import com.example.orderservice.domain.OrderEntity
 import com.example.orderservice.domain.dto.OrderDto
 import com.example.orderservice.domain.vo.ResponseOrder
+import com.example.orderservice.infra.messagequeue.KafkaProducer
+import com.example.orderservice.infra.messagequeue.OrderProducer
 import org.modelmapper.ModelMapper
 import org.modelmapper.config.Configuration.AccessLevel
 import org.modelmapper.convention.MatchingStrategies
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.util.*
 
 @RestController
 class OrderController(
-    val orderService: OrderService
+    val orderService: OrderService,
+    val kafkaProducer: KafkaProducer,
+    val orderProducer: OrderProducer
 ) {
     @PostMapping("/{userId}/orders")
     fun createOrder(
@@ -28,8 +34,18 @@ class OrderController(
         }
         val dto = mapper.map(orderRequest, OrderDto::class.java)
         dto.userId = userId
-        val createOrder = orderService.createOrder(dto)
-        val responseOrder = mapper.map(createOrder, ResponseOrder::class.java)
+
+//        val createOrder = orderService.createOrder(dto)
+//        val responseOrder = mapper.map(createOrder, ResponseOrder::class.java)
+
+        /* kafka */
+        dto.orderId = UUID.randomUUID().toString()
+        dto.totalPrice = orderRequest.unitPrice.let { dto.qty?.times(it) }
+
+        kafkaProducer.send("example-catalog-topic", dto)
+        orderProducer.send("orders2", dto)
+
+        val responseOrder = mapper.map(dto, ResponseOrder::class.java)
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder)
     }

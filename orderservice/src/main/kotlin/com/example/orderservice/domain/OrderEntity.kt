@@ -13,7 +13,7 @@ class OrderEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
-    @Column(nullable = false, length = 120, unique = true)
+    @Column(nullable = false, length = 120)
     var productId: String? = null,
     @Column(nullable = false)
     var qty: Int? = null,

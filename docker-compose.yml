@@ -1,5 +1,19 @@
 version: '2'
 services:
+  postgresql:
+    image: postgres:latest
+    restart: always
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./data/postgres/:/var/lib/postgresql/data
+    networks:
+      - jack-network
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
     hostname: zookeeper
@@ -9,6 +23,8 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - jack-network
 
   broker:
     image: confluentinc/cp-kafka:7.3.0
@@ -31,8 +47,11 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_JMX_PORT: 9101
       KAFKA_JMX_HOSTNAME: localhost
+    networks:
+      - jack-network
+
   connect:
-    image: confluentinc/cp-kafka-connect:7.0.1
+    image: confluentinc/cp-kafka-connect:latest.arm64
     ports:
       - 8083:8083
     container_name: connect
@@ -55,3 +74,9 @@ services:
       CONNECT_PLUGIN_PATH: "/usr/share/java,/etc/kafka-connect/jars"
     volumes:
       - /Users/jack/99_Study/kafka-connect/component/confluentinc-kafka-connect-jdbc/lib:/etc/kafka-connect/jars
+    networks:
+      - jack-network
+
+networks:
+  jack-network:
+    driver: bridge

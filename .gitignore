@@ -6,3 +6,4 @@ build/
 **/src/main/generated/**
 **/src/generated/**
 docker-provision/
+data/**
