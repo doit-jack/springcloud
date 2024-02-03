@@ -2,6 +2,8 @@ plugins {
     kotlin("plugin.jpa") version "1.8.22"
 }
 
+version = "1.0"
+
 allOpen {
     annotation("javax.persistence.Entity")
     annotation("javax.persistence.Embeddable")
@@ -18,6 +20,12 @@ dependencies {
 
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    implementation("org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j")
+
+    implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.github.openfeign:feign-micrometer")
 
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.modelmapper:modelmapper:2.4.4")

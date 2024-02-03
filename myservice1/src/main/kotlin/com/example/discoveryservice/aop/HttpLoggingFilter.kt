@@ -2,7 +2,6 @@
 
 package com.example.firstservice.aop
 
-import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -17,7 +16,6 @@ import java.util.*
 //@Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class HttpLoggingFilter : OncePerRequestFilter() {
-    private val log = KotlinLogging.logger {}
 
     companion object {
         const val REQUEST_ID = "request_id"
@@ -31,8 +29,6 @@ class HttpLoggingFilter : OncePerRequestFilter() {
         val cachingRequestWrapper = ContentCachingRequestWrapper(request)
         val cachingResponseWrapper = ContentCachingResponseWrapper(response)
 
-        log.info { "Jack: Hi" }
-        log.info { "Jack: " + cachingRequestWrapper.requestURI }
         val startTime = System.currentTimeMillis()
         filterChain.doFilter(cachingRequestWrapper, cachingResponseWrapper)
         val end = System.currentTimeMillis()

@@ -9,7 +9,6 @@ plugins {
 
 allprojects {
     group = "com.example"
-    version = "0.0.1-SNAPSHOT"
 
     repositories {
         mavenCentral()
@@ -40,6 +39,7 @@ subprojects {
 
     dependencies {
         implementation("org.jetbrains.kotlin:kotlin-reflect")
+        testImplementation("org.springframework.boot:spring-boot-starter-test")
     }
 
     extra["springCloudVersion"] = "2023.0.0"

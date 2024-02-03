@@ -19,7 +19,13 @@ dependencies {
     implementation("org.springframework.kafka:spring-kafka")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.micrometer:micrometer-tracing-bridge-brave")
+    implementation("io.zipkin.reporter2:zipkin-reporter-brave")
+    implementation("io.github.openfeign:feign-micrometer")
+
     runtimeOnly("org.postgresql:postgresql")
     implementation("org.modelmapper:modelmapper:2.4.4")
+
 //    developmentOnly("org.springframework.boot:spring-boot-devtools")
 }

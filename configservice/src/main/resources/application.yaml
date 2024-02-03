@@ -5,16 +5,18 @@ spring:
   application:
     name: config-service
   rabbitmq:
-    host: 127.0.0.1
+    host: rabbitmq
     port: 5672
     username: guest
     password: guest
   cloud:
     config:
       server:
+#        native:
+#          search-locations: file://${user.home}/Desktop/~
         git:
-          uri: file://Users/jack/99_Study/github/git-config
-#          uri: https://github.com/[repo]
+#          uri: file://Users/jack/99_Study/github/git-config
+          uri: https://github.com/doit-jack/spring-cloud-config
 #          username: []
 #          password: []
 management:

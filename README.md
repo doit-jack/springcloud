@@ -84,3 +84,58 @@ brew install --cask confluent-hub-client
 
 confluent-hub install confluentinc/kafka-connect-jdbc:latest --component-dir /Users/jack/99_Study/kafka-connect/component --worker-configs /Users/jack/99_Study/kafka-connect/config/worker.properties
 ```
+
+# CircuitBreaker - Resilience4J
+
+- MicroService 통신 시 연쇄 오류
+- CircuitBreaker: 다른 서비스를 호출에 실패했을 때, 그 대신 다른 함수를 호출하고 장애 발생 서비스에 반복적인 호출이 되지 못하게 차단
+
+# Micro Service 분산 추적
+
+### Zipkin
+
+- Span: 하나의 요청에 사용되는 작업 단위
+- Trace: 트리구조로 이루어진 Span 세트. 하나의 요청에 대해 같은 Trace ID 를 발급
+
+->  하나의 요청에 대해 여러 마이크로서비스로 연쇄적으로 요청이 일어날 때, 이 요청들은 같은 Trace Id를 가지고 각 요청들은 고유한 Span Id를 갖는다.
+
+### Spring Cloud Sleuth, Zipkin
+
+- Slueth: 스프링 부트가 가지고 있는 로그/스트리밍 데이터를 Zipkin에 전달
+- Zipkin: Trace Id, Span Id를 생성 관리
+
+![image.png](assets/sleuth.png)
+
+# Container Virtualization
+
+- 물리적인 컴퓨터 리소스를 다른 시스템이나 애플리케이션에서 사용할 수 있도록 제공
+- Hypeprvisor: 가상화 플랫폼
+
+# Gradle MSA 빌드 방법
+
+```gradle
+./gradlew userservice:build
+```
+
+# Docker Build
+
+```bash
+docker build -t jackyoon93/config-service:1.0 ./configservice
+```
+
+# MSA Docker 구성
+
+docker network create --gateway 172.18.0.1 --subnet 172.18.0.0/16 ecommerce-network
+
+docker network inspect ecommerce-network
+
+![image.png](assets/docker-network.png)
+
+```bash
+docker run -d --name rabbitmq --network ecommerce-network -p 15672:15672 -p 5672:5672 -p 15671:15671 -p 5671:5671 -p 4369:4369 -e RABBITMQ_DEFAULT_USER=guest -e RABBITMQ_DEFAULT_PASS=guest rabbitmq:management
+```
+
+- 기본적으로 --network 옵션을 주지 않으면 기본 docker bridge network를 사용하게 되는데, 이럴 경우 다른 네트워크와 같이 저장되어 사용될 수 있어 별도 네트워크를 구성해주는게 좋음
+
+
+<>

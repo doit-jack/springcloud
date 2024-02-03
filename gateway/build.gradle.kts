@@ -1,3 +1,5 @@
+version = 1.0
+
 dependencies {
     implementation(project(":core"))
 
@@ -8,6 +10,8 @@ dependencies {
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap")
     implementation("org.springframework.cloud:spring-cloud-starter-bus-amqp")
+
+    implementation("io.micrometer:micrometer-registry-prometheus")
 
     implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

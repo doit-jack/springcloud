@@ -5,6 +5,7 @@ import com.example.userservice.controller.dto.UserDto
 import com.example.userservice.controller.vo.RequestUser
 import com.example.userservice.controller.vo.ResponseUser
 import com.example.userservice.domain.UserEntity
+import io.micrometer.core.annotation.Timed
 import org.modelmapper.ModelMapper
 import org.modelmapper.config.Configuration
 import org.modelmapper.convention.MatchingStrategies
@@ -22,9 +23,11 @@ class UserController(
 ) {
 
     @GetMapping("/health-check")
+    @Timed(value="users.status", longTask = true)
     fun status(): String = "It's Working, ${env.getProperty("token.secret")}"
 
     @GetMapping("/welcome")
+    @Timed(value="users.welcome", longTask = true)
     fun welcome(): String = msg
 
     @PostMapping("/users")

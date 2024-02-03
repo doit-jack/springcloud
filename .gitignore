@@ -6,4 +6,6 @@ build/
 **/src/main/generated/**
 **/src/generated/**
 docker-provision/
-data/**
+**/data/**
+docker/prometheus/grafana-volume
+docker/prometheus/prometheus-volume

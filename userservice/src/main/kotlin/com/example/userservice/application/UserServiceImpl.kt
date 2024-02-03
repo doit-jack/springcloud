@@ -7,9 +7,9 @@ import com.example.userservice.controller.dto.UserDto
 import com.example.userservice.domain.UserEntity
 import com.example.userservice.infra.client.OrderServiceClient
 import com.example.userservice.infra.repository.UserRepository
-import feign.FeignException
 import org.modelmapper.ModelMapper
 import org.modelmapper.convention.MatchingStrategies
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -23,7 +23,8 @@ class UserServiceImpl(
     val userRepository: UserRepository,
     val passwordEncoder: BCryptPasswordEncoder,
     val restTemplate: RestTemplate,
-    val orderServiceClient: OrderServiceClient
+    val orderServiceClient: OrderServiceClient,
+    val circuitBreakerFactory: CircuitBreakerFactory<*, *>
 ) : UserService {
     override fun createUser(userDto: UserDto): UserDto {
         userDto.userId = UUID.randomUUID().toString()
@@ -45,8 +46,12 @@ class UserServiceImpl(
 //        val exchange =
 //            restTemplate.exchange<List<ResponseOrder>>(orderUrl, HttpMethod.GET, null).body
 //        userDto.orders = exchange.orEmpty()
+//        userDto.orders = orderServiceClient.getOrders(userId)
 
-        userDto.orders = orderServiceClient.getOrders(userId)
+        log().info("Before call orders microservice")
+        val circuitBreaker = circuitBreakerFactory.create("circuitbreaker")
+        userDto.orders = circuitBreaker.run({ orderServiceClient.getOrders(userId) }, { listOf() })
+        log().info("After called orders microservice")
 
 //        FeignErrorDecoder 구현으로 try catch 불필요
 //        try {

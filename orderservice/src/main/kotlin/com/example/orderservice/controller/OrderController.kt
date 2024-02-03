@@ -1,5 +1,6 @@
 package com.example.orderservice.controller
 
+import com.example.core.utils.log
 import com.example.orderservice.application.OrderService
 import com.example.orderservice.controller.dto.RequestOrder
 import com.example.orderservice.domain.OrderEntity
@@ -26,6 +27,7 @@ class OrderController(
         @PathVariable("userId") userId: String,
         @RequestBody orderRequest: RequestOrder,
     ): ResponseEntity<ResponseOrder> {
+        log().info("Before add orders data")
         val mapper = ModelMapper()
         mapper.apply {
             configuration.isFieldMatchingEnabled = true
@@ -35,29 +37,30 @@ class OrderController(
         val dto = mapper.map(orderRequest, OrderDto::class.java)
         dto.userId = userId
 
-//        val createOrder = orderService.createOrder(dto)
-//        val responseOrder = mapper.map(createOrder, ResponseOrder::class.java)
+        val createOrder = orderService.createOrder(dto)
+        val responseOrder = mapper.map(createOrder, ResponseOrder::class.java)
 
         /* kafka */
         dto.orderId = UUID.randomUUID().toString()
         dto.totalPrice = orderRequest.unitPrice.let { dto.qty?.times(it) }
 
-        kafkaProducer.send("example-catalog-topic", dto)
-        orderProducer.send("orders2", dto)
+//        kafkaProducer.send("example-catalog-topic", dto)
+//        orderProducer.send("orders", dto)
 
-        val responseOrder = mapper.map(dto, ResponseOrder::class.java)
-
+//        val responseOrder = mapper.map(dto, ResponseOrder::class.java)
+        log().info("After added orders data")
         return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder)
     }
 
     @GetMapping("/{userId}/orders")
     fun getOrder(@PathVariable("userId") userId: String): ResponseEntity<List<ResponseOrder>> {
+        log().info("Before retrieve orders data")
         val orderList: Iterable<OrderEntity> = orderService.getOrdersByUserId(userId)
         val result = mutableListOf<ResponseOrder>()
         orderList.forEach {
             result.add(ModelMapper().map(it, ResponseOrder::class.java))
         }
-
+        log().info("Add retrieved orders data")
         return ResponseEntity.status(HttpStatus.OK).body(result)
     }
 }
