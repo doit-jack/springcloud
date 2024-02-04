@@ -1,11 +1,12 @@
-.idea
-.gradle
+.idea/
+.gradle/
 
 out/
 build/
 generated/
 docker-provision/
-**/data/**
 
-docker/prometheus/**
-!.includedir
+**/data/**
+docker/prometheus/*-volume/**
+!docker/**/.includedir
+
