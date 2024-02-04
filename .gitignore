@@ -3,10 +3,9 @@
 
 out/
 build/
-**/src/main/generated/**
-**/src/generated/**
+generated/
 docker-provision/
 **/data/**
 
 docker/prometheus/**
-!.includedir.txt
+!.includedir
