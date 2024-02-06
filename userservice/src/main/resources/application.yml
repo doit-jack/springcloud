@@ -16,7 +16,7 @@ spring:
     password: guest
   config:
     import:
-      - classpath:datasource.properties
+      - classpath:datasource.yaml
 
 eureka:
   instance:

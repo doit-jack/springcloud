@@ -1,0 +1,52 @@
+version: '2'
+services:
+  config-service:
+    image: jackyoon93/config-service:1.0
+    container_name: config-service
+    ports:
+      - 8888:8888
+    environment:
+      spring.rabbitmq.host: rabbitmq
+#      spring.profiles.active: default
+    depends_on:
+      - rabbitmq
+    networks:
+      - jack-network
+  discovery-service:
+    image: jackyoon93/discovery-service:1.0
+    container_name: discovery-service
+    ports:
+      - 8761:8761
+    networks:
+      - jack-network
+  gateway-service:
+    image: jackyoon93/gateway-service:1.0
+    container_name: gateway-service
+    ports:
+      - 8000:8000
+    environment:
+      ACTIVE_PROFILE: dev
+    depends_on:
+      - config-service
+      - discovery-service
+    networks:
+      - jack-network
+  user-service:
+    image: jackyoon93/user-service:1.0
+    container_name: user-service
+    ports:
+      - 8081:8081
+    environment:
+      spring.cloud.config.uri: http://config-service:8888
+      spring.rabbitmq.host: rabbitmq
+      spring.zipkin.base-url: http://zipkin:9411
+      eureka.client.serviceUrl.defaultZone: http://discovery-service:8761/eureka/
+      logging.file: /api-logs/users-ws.log
+    depends_on:
+      - gateway-service
+    networks:
+      - jack-network
+
+networks:
+  jack-network:
+    driver: bridge

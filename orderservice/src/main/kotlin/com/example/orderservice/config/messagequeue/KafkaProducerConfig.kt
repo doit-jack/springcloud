@@ -16,7 +16,7 @@ class KafkaProducerConfig {
     fun producerFactory(): ProducerFactory<String, String> {
         val properties = mutableMapOf<String, Any>()
 
-        properties[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "127.0.0.1:9092"
+        properties[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = "127.0.0.1:9092" //TODO: 변경
         properties[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         properties[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         return DefaultKafkaProducerFactory(properties)

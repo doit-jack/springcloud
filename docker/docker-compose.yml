@@ -15,37 +15,6 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     networks:
       - jack-network
-  config-service:
-    image: jackyoon93/config-service:1.0
-    container_name: config-service
-    ports:
-      - 8888:8888
-    environment:
-      spring.rabbitmq.host: rabbitmq
-      spring.profiles.active: default
-    depends_on:
-      - rabbitmq
-    networks:
-      - jack-network
-  discovery-service:
-    image: jackyoon93/discovery-service:1.0
-    container_name: discovery-service
-    ports:
-      - 8761:8761
-    networks:
-      - jack-network
-  gateway-service:
-    image: jackyoon93/gateway-service:1.0
-    container_name: gateway-service
-    ports:
-      - 8000:8000
-    environment:
-      spring.cloud.config.uri: http://config-service:8888
-      spring.rabbitmq.host: rabbitmq
-      eureka.client.service-url.defaultZone: http://discovery-service:8761/eureka
-    networks:
-      - jack-network
-
   postgresql:
     image: postgres
     restart: always
@@ -62,7 +31,6 @@ services:
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.0
-    hostname: zookeeper
     container_name: zookeeper
     ports:
       - "2181:2181"
@@ -74,7 +42,6 @@ services:
 
   broker:
     image: confluentinc/cp-kafka:7.3.0
-    hostname: broker
     container_name: broker
     depends_on:
       - zookeeper
